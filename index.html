@@ -104,7 +104,7 @@
                 <p class="text-lg max-w-sm">The definitive engineering knowledge base for high-performance teams. Documented hurdles build stronger futures.</p>
             </div>
             <div>
-                <h4 class="text-white font-bold mb-6 uppercase text-sm tracking-widest">Company</h4>
+                <h4 class="text-white font-bold mb-6 uppercase text-sm tracking-widest">Platform</h4>
                 <div class="flex flex-col gap-4 text-sm">
                     <a href="#" class="hover:text-indigo-400 transition">Internal Wiki</a>
                     <a href="#" class="hover:text-indigo-400 transition">Security Portal</a>
@@ -156,6 +156,7 @@
         window.openModal = (id) => document.getElementById(id).classList.add('modal-active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('modal-active');
 
+        // Status Modal Function (Instead of Alerts)
         function showStatus(success, title, msg) {
             const icon = document.getElementById('statusIcon');
             icon.innerHTML = success ? '<i data-lucide="check-circle" class="w-8 h-8 text-green-600"></i>' : '<i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>';
@@ -166,11 +167,12 @@
             openModal('statusModal');
         }
 
+        // Render Card Function
         function renderCard(title, name, solution, date) {
             const container = document.getElementById('log-container');
             const card = document.createElement('div');
             card.className = "bg-white p-8 rounded-3xl border border-slate-200 shadow-sm card-entry search-item";
-            card.dataset.keyword = title.toLowerCase();
+            card.dataset.keyword = title.toLowerCase(); // Used for search filter
             card.innerHTML = `
                 <div class="flex justify-between items-center mb-6"><span class="text-slate-400 text-xs font-bold uppercase tracking-widest">${date}</span></div>
                 <h3 class="text-2xl font-bold mb-4 text-slate-900 leading-tight">${title}</h3>
@@ -183,11 +185,13 @@
             lucide.createIcons();
         }
 
+        // Load data from Firebase
         onChildAdded(logsRef, (data) => {
             const log = data.val();
             renderCard(log.title, log.name, log.solution, log.timestamp);
         });
 
+        // Submit Logic
         document.getElementById('problemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -206,14 +210,15 @@
                 btn.innerText = "Commit to System";
                 closeModal('entryModal');
                 document.getElementById('problemForm').reset();
-                showStatus(true, "Success!", "Problem logged to knowledge base.");
+                showStatus(true, "Success!", "Problem logged successfully to the cloud.");
             }).catch(() => {
                 btn.disabled = false;
                 btn.innerText = "Commit to System";
-                showStatus(false, "Error", "Failed to sync. Check connection.");
+                showStatus(false, "Sync Error", "Could not reach Firebase. Check your connection.");
             });
         });
 
+        // Search/Filter Logic
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const items = document.querySelectorAll('.search-item');
