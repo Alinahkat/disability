@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Includify | Powered by Firebase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root { --primary-blue: #1d4ed8; }
+        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .disability-card:hover { transform: translateY(-5px); transition: 0.3s; }
+        .btn-gradient { background: linear-gradient(to right, #2563eb, #0891b2); transition: all 0.3s ease; }
+    </style>
+</head>
+<body>
+
+    <nav class="bg-white shadow-sm p-4 sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-700">
+                <i class="fa-solid fa-hand-holding-heart"></i> Includify
+            </h1>
+            <div class="space-x-8 hidden md:flex font-medium text-gray-600">
+                <a href="#search" class="hover:text-blue-600">Disabilities</a>
+                <a href="#contact" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:shadow-lg transition">Consult a Specialist</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="search" class="py-16 bg-slate-50 border-b">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-6 animate__animated animate__fadeInDown">Disability Knowledge Base</h2>
+            <div class="max-w-3xl mx-auto mb-12 relative">
+                <i class="fa-solid fa-search absolute left-5 top-5 text-gray-400"></i>
+                <input type="text" id="searchInput" placeholder="Search (ADHD, Autism, Visual...)" 
+                class="w-full pl-14 pr-6 py-4 rounded-full shadow-lg border-none focus:ring-2 focus:ring-blue-400">
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8" id="disabilityGrid">
+                <div class="disability-card bg-white p-6 rounded-3xl shadow-md animate__animated animate__zoomIn">
+                    <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?auto=format&fit=crop&w=400" class="w-full h-44 object-cover rounded-2xl mb-4">
+                    <h4 class="text-xl font-bold text-blue-900">Autism Spectrum</h4>
+                    <p class="text-gray-500 mt-2 text-sm">Neurological variation affecting communication and social interaction.</p>
+                    <div class="mt-4 p-3 bg-blue-50 rounded-lg text-xs text-left text-blue-800">
+                        <strong><i class="fa-solid fa-user-md"></i> Specialist:</strong> ABA Therapist<br>
+                        <strong><i class="fa-solid fa-school"></i> School:</strong> Sensory-Friendly Academies
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row bg-blue-50 rounded-3xl overflow-hidden shadow-2xl">
+                <div class="md:w-1/2 p-12 bg-blue-700 text-white">
+                    <h3 class="text-3xl font-bold mb-6">Expert Connection</h3>
+                    <p class="mb-8 opacity-90 text-lg">Your inquiry will be securely stored in our database and a specialist will reach out within 24 hours.</p>
+                    <div class="space-y-4">
+                        <p><i class="fa-solid fa-shield-halved mr-2"></i> HIPAA-compliant Data Storage</p>
+                        <p><i class="fa-solid fa-clock mr-2"></i> Fast Response Times</p>
+                    </div>
+                </div>
+                <div class="md:w-1/2 p-12 bg-white">
+                    <form id="contactForm" class="space-y-4">
+                        <input type="text" id="userName" placeholder="Full Name" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500">
+                        <input type="email" id="userEmail" placeholder="Email Address" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500">
+                        <select id="serviceType" class="w-full p-3 rounded-lg border bg-gray-50 outline-none">
+                            <option value="specialist">Seek Specialist</option>
+                            <option value="school">School Recommendation</option>
+                            <option value="other">General Support</option>
+                        </select>
+                        <textarea id="userMessage" rows="4" placeholder="How can we help?" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500"></textarea>
+                        <button type="submit" class="w-full btn-gradient py-4 rounded-lg text-white font-bold text-lg shadow-lg">Send to Database</button>
+                    </form>
+                    <div id="statusMessage" class="mt-4 text-center hidden font-semibold"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-12 text-center">
+        <p class="text-gray-400 mb-4">&copy; 2026 Includify Portal | Empowering All Abilities</p>
+        <div class="flex justify-center space-x-6">
+            <a href="#" class="hover:text-blue-400"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="hover:text-blue-400"><i class="fa-brands fa-twitter"></i></a>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Your provided configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTTk13Wk1B0RmoRoioKMO_ASD5lntvIz8",
+            authDomain: "disability-ae050.firebaseapp.com",
+            projectId: "disability-ae050",
+            storageBucket: "disability-ae050.firebasestorage.app",
+            messagingSenderId: "700458300236",
+            appId: "1:700458300236:web:b36ea4dec89f469d0115e9",
+            measurementId: "G-RPS83BL4RS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Handle Form Submission
+        const contactForm = document.getElementById('contactForm');
+        const statusMsg = document.getElementById('statusMessage');
+
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Get values
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+            const service = document.getElementById('serviceType').value;
+            const message = document.getElementById('userMessage').value;
+
+            // Reference for "inquiries" folder in your database
+            const inquiriesRef = ref(database, 'inquiries');
+            const newInquiryRef = push(inquiriesRef);
+
+            // Set data
+            set(newInquiryRef, {
+                name: name,
+                email: email,
+                service: service,
+                message: message,
+                timestamp: Date.now()
+            })
+            .then(() => {
+                statusMsg.innerText = "Success! Your request has been sent.";
+                statusMsg.className = "mt-4 text-center text-green-600 block";
+                contactForm.reset();
+            })
+            .catch((error) => {
+                statusMsg.innerText = "Error: " + error.message;
+                statusMsg.className = "mt-4 text-center text-red-600 block";
+            });
+        });
+
+        // Search Logic
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let filter = this.value.toLowerCase();
+            let cards = document.querySelectorAll('.disability-card');
+            cards.forEach(card => {
+                let text = card.querySelector('h4').innerText.toLowerCase();
+                card.style.display = text.includes(filter) ? 'block' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>
