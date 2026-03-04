@@ -3,158 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraInclusion | The Future of Accessibility</title>
+    <title>Includify | Intelligent Accessibility</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&display=swap');
+        body { background: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-        :root {
-            --neon-blue: #6366f1;
-            --neon-purple: #a855f7;
-            --glass: rgba(255, 255, 255, 0.7);
-        }
-
-        body { 
-            background: radial-gradient(circle at top right, #f5f3ff, #ffffff, #eff6ff);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            scroll-behavior: smooth;
-            color: #1e293b;
+        /* Neural Search Animation */
+        .ai-glow { animation: neural-pulse 2s infinite; border-color: #6366f1 !important; }
+        @keyframes neural-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
         }
 
-        /* Glassmorphism Navigation */
-        .pill-nav { 
-            border-radius: 999px; 
-            background: rgba(255, 255, 255, 0.4); 
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        /* Floating AI Chatbot */
+        #aiChatBot {
+            position: fixed; bottom: 30px; right: 30px; z-index: 10000;
         }
+        .chat-window {
+            display: none; width: 350px; height: 450px; background: white;
+            border-radius: 30px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.2);
+            flex-direction: column; overflow: hidden; border: 1px solid #e2e8f0;
+        }
+        .chat-window.active { display: flex; }
+        .message { padding: 10px 15px; border-radius: 15px; margin-bottom: 8px; max-width: 85%; font-size: 14px; }
+        .bot-msg { background: #f1f5f9; color: #1e293b; align-self: flex-start; }
+        .user-msg { background: #6366f1; color: white; align-self: flex-end; }
 
-        /* Interactive Search Bar */
-        .search-container {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
+        .inclusion-card {
+            background: white; border-radius: 40px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .search-container:focus-within {
-            transform: scale(1.02);
-            border-color: var(--neon-blue);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Animated Cards */
-        .card-visual {
-            background: white;
-            border-radius: 40px;
-            transition: all 0.5s ease;
-            border: 1px solid #f1f5f9;
-        }
-        .card-visual:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 40px 70px -20px rgba(0,0,0,0.1);
-        }
-        .card-visual img {
-            border-radius: 32px;
-            filter: grayscale(100%);
-            transition: 0.6s ease;
-        }
-        .card-visual:hover img {
-            filter: grayscale(0%);
-            transform: scale(1.05);
-        }
-
-        /* Modal Overlay */
-        .modal-bg {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(15px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-        }
-        .modal-bg.active { display: flex; }
-
-        .typewriter-cursor { color: var(--neon-blue); }
+        .inclusion-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(99, 102, 241, 0.1); }
     </style>
 </head>
 <body>
 
     <div class="fixed top-6 left-0 right-0 z-[1000] px-6">
-        <nav class="pill-nav container mx-auto max-w-5xl p-3 flex justify-between items-center px-10 shadow-2xl">
-            <h1 class="text-2xl font-extrabold tracking-tighter text-indigo-900">
-                Aura<span class="text-indigo-500">Inclusion.</span>
-            </h1>
-            <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
-                <a href="#directory" class="hover:text-indigo-600 transition">Directory</a>
-                <a href="#contact" class="hover:text-indigo-600 transition">Database</a>
-            </div>
-            <a href="#contact" class="bg-indigo-600 text-white px-8 py-3 rounded-full text-xs font-bold hover:bg-indigo-700 shadow-xl shadow-indigo-200 transition">GET SUPPORT</a>
+        <nav class="container mx-auto max-w-5xl bg-white/70 backdrop-blur-md p-3 rounded-full flex justify-between items-center px-8 shadow-xl border border-white">
+            <h1 class="text-2xl font-black text-indigo-900">INCLUDIFY<span class="text-indigo-500">.</span></h1>
+            <a href="#contact" class="bg-indigo-600 text-white px-6 py-2 rounded-full text-xs font-bold shadow-lg">GET HELP</a>
         </nav>
     </div>
 
-    <header class="pt-52 pb-24 px-6 text-center">
-        <div class="inline-block px-4 py-1 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase mb-6 tracking-widest animate__animated animate__fadeInDown">
-            Universal Design & Accessibility
-        </div>
+    <header class="pt-52 pb-20 px-6 text-center">
         <h2 class="text-5xl md:text-8xl font-black text-slate-900 leading-tight">
-            Advocating for <br>
-            <span id="type-text" class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-500"></span>
+            Advancing <br> <span id="typewriter" class="text-indigo-600"></span>
         </h2>
         
-        <div class="max-w-3xl mx-auto mt-16 search-container bg-white p-2 rounded-[35px] shadow-2xl flex items-center pr-4">
-            <input type="text" id="mainSearch" placeholder="Search a disability or condition..." 
-            class="w-full bg-transparent p-6 outline-none text-xl font-medium text-slate-700 placeholder-slate-300">
-            <div class="bg-indigo-600 text-white w-14 h-14 rounded-[25px] flex items-center justify-center shadow-lg cursor-pointer hover:bg-indigo-500 transition">
-                <i class="fa-solid fa-bolt"></i>
+        <div class="max-w-3xl mx-auto mt-12">
+            <div id="searchBox" class="bg-white p-2 rounded-[35px] shadow-2xl flex items-center pr-4 border-2 border-transparent transition-all">
+                <div class="pl-6 text-indigo-500 text-xl"><i class="fa-solid fa-microchip animate-pulse"></i></div>
+                <input type="text" id="aiSearch" placeholder="Type a keyword (e.g. 'reading', 'social', 'movement')..." 
+                class="w-full bg-transparent p-6 outline-none text-xl font-medium text-slate-700">
             </div>
         </div>
     </header>
 
-    <main id="directory" class="container mx-auto px-6 py-12">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12" id="cardGrid">
-            </div>
+    <main class="container mx-auto px-6 py-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10" id="cardGrid"></div>
     </main>
 
-    <div id="infoModal" class="modal-bg">
-        <div class="bg-white rounded-[50px] max-w-4xl w-full max-h-[90vh] overflow-y-auto relative animate__animated animate__zoomIn p-8 sm:p-16">
-            <button onclick="closeModal()" class="absolute top-10 right-10 text-slate-400 hover:text-red-500 text-3xl transition">
-                <i class="fa-solid fa-circle-xmark"></i>
-            </button>
-            <div id="modalData"></div>
+    <div id="aiChatBot">
+        <div id="chatWindow" class="chat-window animate__animated animate__fadeInUp">
+            <div class="bg-indigo-600 p-5 text-white flex justify-between items-center">
+                <span class="font-bold"><i class="fa-solid fa-robot mr-2"></i> Includify AI</span>
+                <button onclick="toggleChat()"><i class="fa-solid fa-chevron-down"></i></button>
+            </div>
+            <div id="chatMessages" class="flex-1 p-5 overflow-y-auto flex flex-col">
+                <div class="message bot-msg">Hello! I'm the Includify Assistant. Ask me about Autism, Dyslexia, or CP!</div>
+            </div>
+            <div class="p-4 border-t flex gap-2">
+                <input type="text" id="chatInput" placeholder="Ask AI..." class="flex-1 outline-none text-sm">
+                <button onclick="sendChat()" class="text-indigo-600 p-2"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
         </div>
+        <button onclick="toggleChat()" class="bg-indigo-600 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-2xl hover:scale-110 transition">
+            <i class="fa-solid fa-comment-dots"></i>
+        </button>
     </div>
 
-    <section id="contact" class="py-32 px-6">
-        <div class="container mx-auto max-w-5xl bg-slate-900 rounded-[60px] p-12 sm:p-24 text-white flex flex-col md:flex-row items-center gap-16 shadow-3xl">
-            <div class="md:w-1/2">
-                <h3 class="text-5xl font-black mb-6">Let's build a plan together.</h3>
-                <p class="text-slate-400 text-lg">Every inquiry is logged into our secure cloud database, allowing our specialists to provide custom recommendations.</p>
-            </div>
-            <div class="md:w-1/2 w-full">
-                <form id="firebaseForm" class="space-y-4">
-                    <input type="text" id="uName" placeholder="Full Name" required class="w-full p-5 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500 transition">
-                    <input type="email" id="uEmail" placeholder="Email Address" required class="w-full p-5 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500 transition">
-                    <textarea id="uMsg" placeholder="Describe the support needed..." rows="4" class="w-full p-5 rounded-2xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500 transition"></textarea>
-                    <button type="submit" class="w-full bg-indigo-500 py-5 rounded-2xl font-bold text-xl hover:bg-indigo-400 transition shadow-2xl shadow-indigo-500/20">LOG INQUIRY</button>
-                </form>
-                <div id="fbStatus" class="mt-6 text-center font-bold hidden"></div>
-            </div>
+    <section id="contact" class="py-24 px-6">
+        <div class="container mx-auto max-w-4xl bg-slate-900 rounded-[50px] p-12 text-white shadow-3xl">
+            <h3 class="text-4xl font-black mb-6 text-center">Specialist Consultation</h3>
+            <form id="contactForm" class="space-y-4 max-w-lg mx-auto">
+                <input type="text" id="uName" placeholder="Name" required class="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500">
+                <input type="email" id="uEmail" placeholder="Email" required class="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500">
+                <textarea id="uMsg" placeholder="Inquiry..." rows="3" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none focus:border-indigo-500"></textarea>
+                <button type="submit" class="w-full bg-indigo-600 py-4 rounded-xl font-bold hover:bg-indigo-500 transition">SAVE TO DATABASE</button>
+            </form>
+            <p id="status" class="mt-4 text-center hidden"></p>
         </div>
     </section>
-
-    <footer class="py-16 text-center">
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">&copy; 2026 AuraInclusion Global &bull; All Rights Reserved</p>
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Your Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTTk13Wk1B0RmoRoioKMO_ASD5lntvIz8",
             authDomain: "disability-ae050.firebaseapp.com",
@@ -165,113 +113,75 @@
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Typewriter Feature
-        new Typewriter('#type-text', {
-            strings: ['The Neurodiverse.', 'Visual Independence.', 'Physical Mobility.', 'Everyone.', 'Equitable Future.'],
-            autoStart: true,
-            loop: true,
-            delay: 75,
+        // Typewriter
+        new Typewriter('#typewriter', {
+            strings: ['Inclusion.', 'Human Rights.', 'Equality.', 'Innovation.'],
+            autoStart: true, loop: true,
         });
 
-        // Massive Disability Database
         const disabilities = [
-            { id: 1, name: "Autism (ASD)", cat: "Neurological", img: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600", desc: "A complex developmental condition that involves persistent challenges in social interaction, speech, and nonverbal communication, alongside restricted/repetitive behaviors.", spec: "ABA Specialist", school: "Integrated Support Hubs" },
-            { id: 2, name: "Dyslexia", cat: "Learning", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600", desc: "A specific learning disability that is neurobiological in origin. It is characterized by difficulties with accurate and/or fluent word recognition and by poor spelling and decoding abilities.", spec: "Reading Clinician", school: "Multisensory Academies" },
-            { id: 3, name: "Cerebral Palsy", cat: "Mobility", img: "https://images.unsplash.com/photo-1534723328310-e82dad3ee43f?w=600", desc: "A group of disorders that affect a person's ability to move and maintain balance and posture. It is caused by abnormal brain development or damage to the developing brain.", spec: "Physical Therapist", school: "Adaptive Learning Centers" },
-            { id: 4, name: "ADHD", cat: "Behavioral", img: "https://images.unsplash.com/photo-1617113931036-79177197b11d?w=600", desc: "A condition that makes it unusually difficult for people to concentrate on tasks, to pay attention, to sit still, and to control impulsive behavior.", spec: "Executive Function Coach", school: "Flexible Environment Schools" },
-            { id: 5, name: "Epilepsy", cat: "Neurological", img: "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600", desc: "A central nervous system (neurological) disorder in which brain activity becomes abnormal, causing seizures or periods of unusual behavior, sensations and sometimes loss of awareness.", spec: "Neurologist", school: "Inclusion-Ready Districts" },
-            { id: 6, name: "Down Syndrome", cat: "Genetic", img: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600", desc: "A condition in which a person has an extra chromosome. Chromosomes are small 'packages' of genes in the body. They determine how a baby’s body forms during pregnancy.", spec: "Speech Pathologist", school: "Early Intervention Specialists" }
+            { id: 1, name: "Autism (ASD)", keywords: ["social", "brain", "speech", "behavior"], img: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=600", desc: "A neurodevelopmental condition impacting social interaction." },
+            { id: 2, name: "Dyslexia", keywords: ["reading", "letters", "writing", "spelling"], img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600", desc: "A learning disability focusing on reading and phonological processing." },
+            { id: 3, name: "Cerebral Palsy", keywords: ["movement", "physical", "motor", "muscles"], img: "https://images.unsplash.com/photo-1534723328310-e82dad3ee43f?w=600", desc: "A physical disability affecting movement and muscle coordination." }
         ];
 
-        // UI Core
-        const cardGrid = document.getElementById('cardGrid');
+        // Search & Render
+        const grid = document.getElementById('cardGrid');
+        const aiSearch = document.getElementById('aiSearch');
         function render(list) {
-            cardGrid.innerHTML = list.length ? list.map(d => `
-                <div class="card-visual p-8 animate__animated animate__fadeInUp" onclick="openModal(${d.id})">
-                    <img src="${d.img}" class="w-full h-64 object-cover mb-8 shadow-2xl">
-                    <div class="space-y-2">
-                        <span class="text-[10px] font-black uppercase text-indigo-400 tracking-widest">${d.cat}</span>
-                        <h4 class="text-3xl font-extrabold text-slate-800">${d.name}</h4>
-                        <p class="text-slate-400 text-sm">View full clinical profile <i class="fa-solid fa-arrow-right ml-2"></i></p>
-                    </div>
+            grid.innerHTML = list.map(d => `
+                <div class="inclusion-card p-6 shadow-lg animate__animated animate__zoomIn">
+                    <img src="${d.img}" class="w-full h-48 object-cover rounded-3xl mb-4">
+                    <h4 class="text-2xl font-black">${d.name}</h4>
+                    <p class="text-gray-500 text-sm">${d.desc}</p>
                 </div>
-            `).join('') : `<div class="col-span-full py-20 text-center text-slate-400 italic">No conditions match your search...</div>`;
+            `).join('');
         }
         render(disabilities);
 
-        // Search Engine
-        document.getElementById('mainSearch').addEventListener('input', (e) => {
+        aiSearch.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
-            const filtered = disabilities.filter(d => 
-                d.name.toLowerCase().includes(query) || d.cat.toLowerCase().includes(query)
-            );
-            render(filtered);
+            document.getElementById('searchBox').classList.toggle('ai-glow', query.length > 0);
+            render(disabilities.filter(d => d.name.toLowerCase().includes(query) || d.keywords.some(k => k.includes(query))));
         });
 
-        // Speech & Modal
-        window.openModal = (id) => {
-            const item = disabilities.find(x => x.id === id);
-            document.getElementById('modalData').innerHTML = `
-                <div class="flex flex-col lg:flex-row gap-16 items-start">
-                    <div class="lg:w-1/2">
-                        <div class="flex items-center gap-6 mb-8">
-                            <h2 class="text-5xl font-black text-slate-900">${item.name}</h2>
-                            <button onclick="readText('${item.desc}')" class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-2xl hover:bg-indigo-600 hover:text-white transition">
-                                <i class="fa-solid fa-volume-high"></i>
-                            </button>
-                        </div>
-                        <p class="text-xl text-slate-500 leading-relaxed mb-10">${item.desc}</p>
-                        <div class="grid grid-cols-1 gap-4">
-                            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                                <h5 class="text-xs font-black uppercase text-indigo-400 mb-2">Recommended Specialist</h5>
-                                <p class="text-xl font-bold text-slate-800">${item.spec}</p>
-                            </div>
-                            <div class="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                                <h5 class="text-xs font-black uppercase text-indigo-400 mb-2">Best Educational Fit</h5>
-                                <p class="text-xl font-bold text-slate-800">${item.school}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:w-1/2 w-full">
-                        <img src="${item.img}" class="w-full h-[500px] object-cover rounded-[40px] shadow-3xl">
-                    </div>
-                </div>
-            `;
-            document.getElementById('infoModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+        // Chatbot Logic
+        window.toggleChat = () => document.getElementById('chatWindow').classList.toggle('active');
+        window.sendChat = () => {
+            const input = document.getElementById('chatInput');
+            const box = document.getElementById('chatMessages');
+            if (!input.value) return;
+
+            // User Message
+            box.innerHTML += `<div class="message user-msg">${input.value}</div>`;
+            
+            // AI Response Logic
+            let reply = "I'm not sure about that. Try asking about Dyslexia or Autism!";
+            const text = input.value.toLowerCase();
+            if (text.includes("autism")) reply = "Autism (ASD) affects communication. Specialists suggest ABA therapy.";
+            if (text.includes("reading") || text.includes("dyslexia")) reply = "Dyslexia impacts reading. Multisensory learning is a great school fit.";
+            if (text.includes("help") || text.includes("support")) reply = "You can fill out the contact form below to get specialist help!";
+
+            setTimeout(() => {
+                box.innerHTML += `<div class="message bot-msg">${reply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 600);
+            input.value = "";
         };
 
-        window.closeModal = () => {
-            window.speechSynthesis.cancel();
-            document.getElementById('infoModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        };
-
-        window.readText = (t) => {
-            window.speechSynthesis.cancel();
-            const speech = new SpeechSynthesisUtterance(t);
-            speech.rate = 0.9;
-            window.speechSynthesis.speak(speech);
-        };
-
-        // Firebase Submit
-        document.getElementById('firebaseForm').addEventListener('submit', async (e) => {
+        // Firebase Logic
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const status = document.getElementById('fbStatus');
+            const s = document.getElementById('status');
             try {
                 await push(ref(database, 'inquiries'), {
                     name: document.getElementById('uName').value,
                     email: document.getElementById('uEmail').value,
-                    msg: document.getElementById('uMsg').value,
-                    timestamp: new Date().toISOString()
+                    msg: document.getElementById('uMsg').value
                 });
-                status.innerText = "Inquiry Logged Successfully";
-                status.className = "mt-6 text-green-400 block animate__animated animate__heartBeat";
+                s.innerText = "Logged to Firebase!"; s.className = "mt-4 text-green-400 block";
                 e.target.reset();
-            } catch(err) {
-                status.innerText = "Connection Error";
-                status.className = "mt-6 text-red-500 block";
-            }
+            } catch(e) { s.innerText = "Error!"; s.className = "mt-4 text-red-400 block"; }
         });
     </script>
 </body>
