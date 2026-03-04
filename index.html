@@ -76,7 +76,7 @@
         </div>
         
         <main id="log-container" class="bg-white dark:bg-slate-900 border border-t-0 border-slate-200 dark:border-slate-800 rounded-b-2xl mb-20 overflow-hidden min-h-[200px]">
-            </main>
+        </main>
         
         <div id="noResults" class="hidden text-center py-20 bg-white dark:bg-slate-900 rounded-b-2xl border border-slate-200 dark:border-slate-800">
             <i data-lucide="search-x" class="w-12 h-12 text-slate-300 mx-auto mb-4"></i>
@@ -147,9 +147,9 @@
         };
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
 
-        // Typing effect
+        // Typing effect - Updated to Future Technicians
         const textElement = document.getElementById('typing-text');
-        const phrases = ["future developers.", "your teammates.", "tomorrow's self."];
+        const phrases = ["future technicians.", "your teammates.", "tomorrow's self."];
         let pIndex = 0, cIndex = 0, isDeleting = false;
         function type() {
             const current = phrases[pIndex];
