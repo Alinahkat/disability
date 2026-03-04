@@ -27,7 +27,8 @@
         }
         .modal-active { display: flex; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .card-entry { animation: fadeInUp 0.5s ease forwards; transition: all 0.3s ease; }
+        .row-entry { animation: fadeInUp 0.5s ease forwards; transition: all 0.2s ease; }
+        .copy-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body class="text-slate-800">
@@ -41,46 +42,52 @@
                     </div>
                     <span class="text-2xl font-bold tracking-tight text-slate-900">LogYour<span class="text-indigo-600">Problem</span></span>
                 </div>
-                <button onclick="openModal('entryModal')" class="bg-indigo-600 text-white px-7 py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-200 active:scale-95 flex items-center gap-2 font-semibold">
+                <button onclick="openModal('entryModal')" class="bg-indigo-600 text-white px-7 py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-lg flex items-center gap-2 font-semibold">
                     <i data-lucide="plus" class="w-5 h-5"></i> Log New Problem
                 </button>
             </div>
         </div>
     </nav>
 
-    <header class="pt-24 pb-16 px-4 text-center bg-white border-b border-slate-100">
-        <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
+    <header class="pt-20 pb-12 px-4 text-center bg-white">
+        <h1 class="text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
             Solving problems for <br>
             <span id="typing-text" class="text-indigo-600 typing-cursor"></span>
         </h1>
-        <div class="max-w-2xl mx-auto relative mt-12">
+        <div class="max-w-3xl mx-auto relative mt-10">
             <i data-lucide="search" class="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="searchInput" placeholder="Search problems by keyword..." 
-                class="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-slate-100 focus:border-indigo-500 outline-none shadow-xl shadow-slate-200/50 transition-all text-lg">
+            <input type="text" id="searchInput" placeholder="Search by keyword (e.g. 'Server', 'UI', 'Database')..." 
+                class="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-slate-100 focus:border-indigo-500 outline-none shadow-xl shadow-slate-200/40 transition-all text-lg">
         </div>
     </header>
 
-    <main class="bg-slate-50 min-h-screen py-16">
-        <div id="log-container" class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
-        <div id="noResults" class="hidden text-center py-20">
-            <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
-            <p class="text-slate-500 text-xl">No matching problems found.</p>
+    <div class="max-w-7xl mx-auto px-4 mt-8">
+        <div class="grid grid-cols-12 gap-0 px-8 py-4 bg-slate-900 text-white rounded-t-2xl text-xs font-bold uppercase tracking-widest">
+            <div class="col-span-4 border-r border-slate-700 flex items-center gap-2">Problem Detail</div>
+            <div class="col-span-8 pl-6 flex items-center gap-2">Technical Solution</div>
         </div>
-    </main>
+        
+        <main id="log-container" class="bg-slate-50 border border-t-0 border-slate-200 rounded-b-2xl mb-20 overflow-hidden">
+            </main>
+
+        <div id="noResults" class="hidden text-center py-20 bg-white rounded-b-2xl border border-slate-200">
+            <i data-lucide="search-x" class="w-12 h-12 text-slate-300 mx-auto mb-4"></i>
+            <p class="text-slate-500">No matching logs found.</p>
+        </div>
+    </div>
 
     <div id="entryModal" class="modal-overlay">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate__animated animate__zoomIn">
             <div class="p-10">
                 <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-3xl font-bold text-slate-900">New Log</h2>
+                    <h2 class="text-3xl font-bold text-slate-900">New Log Entry</h2>
                     <button onclick="closeModal('entryModal')" class="text-slate-400 hover:text-slate-900 transition"><i data-lucide="x" class="w-8 h-8"></i></button>
                 </div>
                 <form id="problemForm" class="space-y-6">
                     <input id="formTitle" required type="text" placeholder="Problem Title" class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none">
                     <input id="formName" required type="text" placeholder="Your Name" class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none">
-                    <textarea id="formSolution" required rows="5" placeholder="Step-by-step solution..." class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none"></textarea>
-                    <button type="submit" id="submitBtn" class="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl hover:bg-indigo-700 transition shadow-lg">Commit to Knowledge Base</button>
+                    <textarea id="formSolution" required rows="5" placeholder="Step-by-step fix..." class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none"></textarea>
+                    <button type="submit" id="submitBtn" class="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl hover:bg-indigo-700 transition shadow-lg">Commit to Database</button>
                 </form>
             </div>
         </div>
@@ -89,32 +96,26 @@
     <div id="statusModal" class="modal-overlay">
         <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center animate__animated animate__bounceIn">
             <div id="statusIcon" class="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"></div>
-            <h3 id="statusTitle" class="text-xl font-bold mb-2 text-slate-900"></h3>
+            <h3 id="statusTitle" class="text-xl font-bold mb-2"></h3>
             <p id="statusMsg" class="text-slate-500 mb-6"></p>
             <button onclick="closeModal('statusModal')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">Close</button>
         </div>
     </div>
 
     <footer class="bg-slate-900 text-slate-400 pt-20 pb-10 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 mb-16">
-            <div class="col-span-1 md:col-span-2">
-                <div class="flex items-center gap-2 mb-6 text-white text-2xl font-bold uppercase tracking-tight">
-                    <i data-lucide="terminal" class="text-indigo-400"></i> LogYourProblem
-                </div>
-                <p class="text-lg max-w-sm">The definitive engineering knowledge base for high-performance teams. Documented hurdles build stronger futures.</p>
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-10 mb-10 gap-8">
+            <div class="flex items-center gap-2 text-white text-2xl font-bold uppercase tracking-tight">
+                <i data-lucide="terminal" class="text-indigo-400"></i> LogYourProblem
             </div>
-            <div>
-                <h4 class="text-white font-bold mb-6 uppercase text-sm tracking-widest">Platform</h4>
-                <div class="flex flex-col gap-4 text-sm">
-                    <a href="#" class="hover:text-indigo-400 transition">Internal Wiki</a>
-                    <a href="#" class="hover:text-indigo-400 transition">Security Portal</a>
-                    <a href="#" class="hover:text-indigo-400 transition">Admin Dashboard</a>
-                </div>
+            <div class="flex gap-10 text-sm font-semibold">
+                <a href="#" class="hover:text-indigo-400 transition">Infrastructure</a>
+                <a href="#" class="hover:text-indigo-400 transition">Security</a>
+                <a href="#" class="hover:text-indigo-400 transition">API docs</a>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto border-t border-slate-800 pt-10 flex flex-col md:flex-row justify-between text-xs font-bold uppercase tracking-widest gap-4">
-            <p>&copy; 2026 TechCorp Global Infrastructure.</p>
-            <div class="flex gap-8"><a href="#">Privacy</a><a href="#">Security</a><a href="#">Terms</a></div>
+        <div class="max-w-7xl mx-auto flex justify-between items-center text-xs uppercase tracking-widest font-bold">
+            <p>&copy; 2026 TechCorp Internal Engineering Hub.</p>
+            <div class="flex gap-6"><a href="#">Privacy</a><a href="#">Terms</a></div>
         </div>
     </footer>
 
@@ -139,7 +140,7 @@
 
         lucide.createIcons();
 
-        // Typing effect
+        // Typing Effect
         const textElement = document.getElementById('typing-text');
         const phrases = ["future developers.", "your teammates.", "tomorrow's self."];
         let pIndex = 0, cIndex = 0, isDeleting = false;
@@ -156,10 +157,9 @@
         window.openModal = (id) => document.getElementById(id).classList.add('modal-active');
         window.closeModal = (id) => document.getElementById(id).classList.remove('modal-active');
 
-        // Status Modal Function (Instead of Alerts)
         function showStatus(success, title, msg) {
             const icon = document.getElementById('statusIcon');
-            icon.innerHTML = success ? '<i data-lucide="check-circle" class="w-8 h-8 text-green-600"></i>' : '<i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>';
+            icon.innerHTML = success ? '<i data-lucide="check-circle" class="text-green-600"></i>' : '<i data-lucide="alert-triangle" class="text-red-600"></i>';
             icon.className = `mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${success ? 'bg-green-100' : 'bg-red-100'}`;
             document.getElementById('statusTitle').innerText = title;
             document.getElementById('statusMsg').innerText = msg;
@@ -167,31 +167,50 @@
             openModal('statusModal');
         }
 
-        // Render Card Function
-        function renderCard(title, name, solution, date) {
+        // Render Split Row
+        function renderRow(title, name, solution, date) {
             const container = document.getElementById('log-container');
-            const card = document.createElement('div');
-            card.className = "bg-white p-8 rounded-3xl border border-slate-200 shadow-sm card-entry search-item";
-            card.dataset.keyword = title.toLowerCase(); // Used for search filter
-            card.innerHTML = `
-                <div class="flex justify-between items-center mb-6"><span class="text-slate-400 text-xs font-bold uppercase tracking-widest">${date}</span></div>
-                <h3 class="text-2xl font-bold mb-4 text-slate-900 leading-tight">${title}</h3>
-                <p class="text-slate-600 text-sm mb-8 leading-relaxed line-clamp-4">${solution}</p>
-                <div class="flex items-center gap-3 pt-6 border-t border-slate-50">
-                    <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">${name.charAt(0).toUpperCase()}</div>
-                    <div><p class="text-sm font-bold text-slate-900">${name}</p><p class="text-[10px] text-slate-400 uppercase tracking-tighter">Verified Dev</p></div>
+            const row = document.createElement('div');
+            row.className = "grid grid-cols-12 gap-0 border-b border-slate-200 row-entry search-item";
+            row.dataset.keyword = title.toLowerCase();
+            
+            row.innerHTML = `
+                <div class="col-span-4 p-8 bg-slate-50/50 border-r border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 leading-tight mb-4">${title}</h3>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold">${name.charAt(0).toUpperCase()}</div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-700">${name}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">${date}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-8 p-8 bg-white relative group">
+                    <button onclick="copyText(this, \`${solution.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)" 
+                            class="copy-btn absolute top-4 right-4 p-2 bg-slate-100 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all opacity-0 group-hover:opacity-100 flex items-center gap-2 text-xs font-bold">
+                        <i data-lucide="copy" class="w-4 h-4"></i> Copy Solution
+                    </button>
+                    <p class="text-slate-600 text-sm leading-relaxed whitespace-pre-line">${solution}</p>
                 </div>`;
-            container.insertBefore(card, container.firstChild);
+            container.insertBefore(row, container.firstChild);
             lucide.createIcons();
         }
 
-        // Load data from Firebase
+        // Copy Function
+        window.copyText = (btn, text) => {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-600"></i> <span class="text-green-600">Copied!</span>`;
+                lucide.createIcons();
+                setTimeout(() => { btn.innerHTML = original; lucide.createIcons(); }, 2000);
+            });
+        };
+
         onChildAdded(logsRef, (data) => {
             const log = data.val();
-            renderCard(log.title, log.name, log.solution, log.timestamp);
+            renderRow(log.title, log.name, log.solution, log.timestamp);
         });
 
-        // Submit Logic
         document.getElementById('problemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -207,25 +226,24 @@
 
             push(logsRef, newLog).then(() => {
                 btn.disabled = false;
-                btn.innerText = "Commit to System";
+                btn.innerText = "Commit to Database";
                 closeModal('entryModal');
                 document.getElementById('problemForm').reset();
-                showStatus(true, "Success!", "Problem logged successfully to the cloud.");
+                showStatus(true, "Log Created", "Solution is now available for the whole team.");
             }).catch(() => {
                 btn.disabled = false;
-                btn.innerText = "Commit to System";
-                showStatus(false, "Sync Error", "Could not reach Firebase. Check your connection.");
+                btn.innerText = "Commit to Database";
+                showStatus(false, "Connection Error", "Check your internet and try again.");
             });
         });
 
-        // Search/Filter Logic
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.search-item');
+            const rows = document.querySelectorAll('.search-item');
             let found = false;
-            items.forEach(item => {
-                const match = item.dataset.keyword.includes(term);
-                item.style.display = match ? 'block' : 'none';
+            rows.forEach(row => {
+                const match = row.dataset.keyword.includes(term);
+                row.style.display = match ? 'grid' : 'none';
                 if(match) found = true;
             });
             document.getElementById('noResults').style.display = found ? 'none' : 'block';
