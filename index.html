@@ -3,154 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Includify | Powered by Firebase</title>
+    <title>Includify | Global Inclusion Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     <style>
-        :root { --primary-blue: #1d4ed8; }
-        body { background-color: #f8fafc; font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .disability-card:hover { transform: translateY(-5px); transition: 0.3s; }
-        .btn-gradient { background: linear-gradient(to right, #2563eb, #0891b2); transition: all 0.3s ease; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+
+        :root { --main-blue: #2563eb; --main-purple: #7c3aed; }
+        body { background: #fdfcfb; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+
+        /* Accessibility Sidebar */
+        .access-sidebar { position: fixed; right: -200px; top: 50%; transform: translateY(-50%); background: white; padding: 15px; border-radius: 20px 0 0 20px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); z-index: 2000; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .access-sidebar.open { right: 0; }
+        .high-contrast { background: #000 !important; color: #fff !important; }
+        .high-contrast .disability-card, .high-contrast nav, .high-contrast .modal-box { background: #111 !important; border: 1px solid #fff !important; color: white !important; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--main-blue); border-radius: 10px; }
+
+        /* Map Card Hover */
+        .map-result:hover { border-left: 6px solid var(--main-purple); background: #f5f3ff; }
     </style>
 </head>
-<body>
+<body id="appBody">
 
-    <nav class="bg-white shadow-sm p-4 sticky top-0 z-50">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-700">
-                <i class="fa-solid fa-hand-holding-heart"></i> Includify
-            </h1>
-            <div class="space-x-8 hidden md:flex font-medium text-gray-600">
-                <a href="#search" class="hover:text-blue-600">Disabilities</a>
-                <a href="#contact" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:shadow-lg transition">Consult a Specialist</a>
+    <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="fixed right-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-4 rounded-l-2xl z-[2001] shadow-xl">
+        <i class="fa-solid fa-universal-access text-xl"></i>
+    </button>
+
+    <div id="sidebar" class="access-sidebar space-y-4">
+        <p class="text-[10px] font-bold text-gray-400 uppercase">Accessibility</p>
+        <button onclick="changeFontSize(2)" class="w-full p-3 bg-gray-100 rounded-xl hover:bg-blue-100 transition"><i class="fa-solid fa-plus mr-2"></i> Font</button>
+        <button onclick="changeFontSize(-2)" class="w-full p-3 bg-gray-100 rounded-xl hover:bg-blue-100 transition"><i class="fa-solid fa-minus mr-2"></i> Font</button>
+        <button onclick="toggleContrast()" class="w-full p-3 bg-gray-100 rounded-xl hover:bg-purple-100 transition"><i class="fa-solid fa-circle-half-stroke mr-2"></i> Contrast</button>
+    </div>
+
+    <div class="fixed top-4 left-0 right-0 z-[1000] px-4">
+        <nav class="container mx-auto max-w-5xl bg-white/80 backdrop-blur-md p-3 rounded-full flex justify-between items-center px-6 shadow-lg border border-white">
+            <h1 class="text-xl font-black text-blue-600 tracking-tighter"><i class="fa-solid fa-infinity"></i> INCLUDIFY</h1>
+            <div class="flex gap-4">
+                <a href="#map" class="text-xs font-bold bg-gray-100 px-4 py-2 rounded-full hidden sm:block">FIND SCHOOLS</a>
+                <a href="#contact" class="text-xs font-bold bg-blue-600 text-white px-4 py-2 rounded-full">HELP</a>
+            </div>
+        </nav>
+    </div>
+
+    <header class="pt-40 pb-16 px-6 text-center max-w-4xl mx-auto">
+        <h2 class="text-4xl sm:text-6xl font-black text-gray-900 leading-none mb-6">
+            Building a World <br> accessible for <br>
+            <span id="typewriter" class="text-blue-600"></span>
+        </h2>
+        <div class="relative max-w-xl mx-auto mt-10">
+            <input type="text" id="searchInput" placeholder="Search a disability type..." class="w-full p-6 rounded-full shadow-2xl border-none outline-none text-lg">
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-magnifying-glass"></i>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <section id="search" class="py-16 bg-slate-50 border-b">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl font-bold text-gray-800 mb-6 animate__animated animate__fadeInDown">Disability Knowledge Base</h2>
-            <div class="max-w-3xl mx-auto mb-12 relative">
-                <i class="fa-solid fa-search absolute left-5 top-5 text-gray-400"></i>
-                <input type="text" id="searchInput" placeholder="Search (ADHD, Autism, Visual...)" 
-                class="w-full pl-14 pr-6 py-4 rounded-full shadow-lg border-none focus:ring-2 focus:ring-blue-400">
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8" id="disabilityGrid">
-                <div class="disability-card bg-white p-6 rounded-3xl shadow-md animate__animated animate__zoomIn">
-                    <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?auto=format&fit=crop&w=400" class="w-full h-44 object-cover rounded-2xl mb-4">
-                    <h4 class="text-xl font-bold text-blue-900">Autism Spectrum</h4>
-                    <p class="text-gray-500 mt-2 text-sm">Neurological variation affecting communication and social interaction.</p>
-                    <div class="mt-4 p-3 bg-blue-50 rounded-lg text-xs text-left text-blue-800">
-                        <strong><i class="fa-solid fa-user-md"></i> Specialist:</strong> ABA Therapist<br>
-                        <strong><i class="fa-solid fa-school"></i> School:</strong> Sensory-Friendly Academies
-                    </div>
-                </div>
-                </div>
-        </div>
-    </section>
+    <main id="directory" class="container mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-10">
+        </main>
 
-    <section id="contact" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row bg-blue-50 rounded-3xl overflow-hidden shadow-2xl">
-                <div class="md:w-1/2 p-12 bg-blue-700 text-white">
-                    <h3 class="text-3xl font-bold mb-6">Expert Connection</h3>
-                    <p class="mb-8 opacity-90 text-lg">Your inquiry will be securely stored in our database and a specialist will reach out within 24 hours.</p>
-                    <div class="space-y-4">
-                        <p><i class="fa-solid fa-shield-halved mr-2"></i> HIPAA-compliant Data Storage</p>
-                        <p><i class="fa-solid fa-clock mr-2"></i> Fast Response Times</p>
-                    </div>
+    <section id="map" class="py-20 bg-blue-50 px-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+                <div class="lg:w-1/3 bg-blue-600 p-10 text-white">
+                    <h3 class="text-3xl font-black mb-4">Resource Locator</h3>
+                    <p class="opacity-80 mb-6">Find the nearest specialized schools and clinics near you.</p>
+                    <input type="text" id="zipSearch" placeholder="Enter City or Zip Code" class="w-full p-4 rounded-2xl bg-white/10 border border-white/20 text-white placeholder-white/50 outline-none focus:bg-white/20">
                 </div>
-                <div class="md:w-1/2 p-12 bg-white">
-                    <form id="contactForm" class="space-y-4">
-                        <input type="text" id="userName" placeholder="Full Name" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500">
-                        <input type="email" id="userEmail" placeholder="Email Address" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500">
-                        <select id="serviceType" class="w-full p-3 rounded-lg border bg-gray-50 outline-none">
-                            <option value="specialist">Seek Specialist</option>
-                            <option value="school">School Recommendation</option>
-                            <option value="other">General Support</option>
-                        </select>
-                        <textarea id="userMessage" rows="4" placeholder="How can we help?" required class="w-full p-3 rounded-lg border bg-gray-50 outline-none focus:border-blue-500"></textarea>
-                        <button type="submit" class="w-full btn-gradient py-4 rounded-lg text-white font-bold text-lg shadow-lg">Send to Database</button>
-                    </form>
-                    <div id="statusMessage" class="mt-4 text-center hidden font-semibold"></div>
+                <div class="lg:w-2/3 p-10 h-[400px] overflow-y-auto space-y-4" id="mapResults">
+                    <p class="text-gray-400 italic">Enter your location to see results...</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-900 text-white py-12 text-center">
-        <p class="text-gray-400 mb-4">&copy; 2026 Includify Portal | Empowering All Abilities</p>
-        <div class="flex justify-center space-x-6">
-            <a href="#" class="hover:text-blue-400"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#" class="hover:text-blue-400"><i class="fa-brands fa-twitter"></i></a>
+    <div id="infoModal" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[3000] hidden items-center justify-center p-4">
+        <div class="modal-box bg-white rounded-[40px] max-w-2xl w-full relative p-8 sm:p-12 animate__animated animate__zoomIn">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-red-500 text-2xl"><i class="fa-solid fa-circle-xmark"></i></button>
+            <div id="modalContent"></div>
         </div>
+    </div>
+
+    <section id="contact" class="py-20 px-6">
+        <div class="container mx-auto max-w-3xl bg-white p-10 rounded-[50px] shadow-2xl">
+            <h3 class="text-3xl font-black text-center mb-8">Save Consultation Request</h3>
+            <form id="contactForm" class="space-y-4">
+                <input type="text" id="userName" placeholder="Full Name" required class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none ring-2 ring-gray-100 focus:ring-blue-500">
+                <input type="email" id="userEmail" placeholder="Email Address" required class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none ring-2 ring-gray-100 focus:ring-blue-500">
+                <textarea id="userMessage" placeholder="How can we support you today?" rows="3" class="w-full p-4 rounded-2xl bg-gray-50 border-none outline-none ring-2 ring-gray-100 focus:ring-blue-500"></textarea>
+                <button type="submit" class="w-full bg-blue-600 text-white py-5 rounded-full font-bold shadow-xl shadow-blue-200 hover:scale-105 transition">SUBMIT TO FIREBASE</button>
+            </form>
+            <p id="formStatus" class="mt-4 text-center hidden"></p>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center opacity-30 text-[10px] font-bold tracking-widest uppercase">
+        Includify Hub &bull; Empowering Every Ability &bull; 2026
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // Your provided configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTTk13Wk1B0RmoRoioKMO_ASD5lntvIz8",
             authDomain: "disability-ae050.firebaseapp.com",
             projectId: "disability-ae050",
-            storageBucket: "disability-ae050.firebasestorage.app",
-            messagingSenderId: "700458300236",
-            appId: "1:700458300236:web:b36ea4dec89f469d0115e9",
-            measurementId: "G-RPS83BL4RS"
+            databaseURL: "https://disability-ae050-default-rtdb.firebaseio.com",
+            appId: "1:700458300236:web:b36ea4dec89f469d0115e9"
         };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
-        // Handle Form Submission
-        const contactForm = document.getElementById('contactForm');
-        const statusMsg = document.getElementById('statusMessage');
+        new Typewriter('#typewriter', { strings: ['Neurodiversity.', 'Vision Needs.', 'Mobility.', 'Everyone.'], autoStart: true, loop: true });
 
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+        // Accessibility Settings
+        let fSize = 16;
+        window.changeFontSize = (s) => { fSize += s; document.body.style.fontSize = fSize + 'px'; };
+        window.toggleContrast = () => document.body.classList.toggle('high-contrast');
 
-            // Get values
-            const name = document.getElementById('userName').value;
-            const email = document.getElementById('userEmail').value;
-            const service = document.getElementById('serviceType').value;
-            const message = document.getElementById('userMessage').value;
+        // Data
+        const disabilities = [
+            { id: 1, name: "Autism (ASD)", img: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=500", desc: "A neurodevelopmental condition involving challenges with social interaction and communication.", spec: "ABA Specialist", school: "Integrated Support Academy" },
+            { id: 2, name: "Dyslexia", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500", desc: "A learning disorder affecting reading due to speech-sound identification challenges.", spec: "Educational Psych", school: "Literacy Specialized Centers" }
+        ];
 
-            // Reference for "inquiries" folder in your database
-            const inquiriesRef = ref(database, 'inquiries');
-            const newInquiryRef = push(inquiriesRef);
+        const resources = [
+            { city: "New York", name: "NY Center for Autism", zip: "10001", type: "School" },
+            { city: "Los Angeles", name: "LA Learning Lab", zip: "90001", type: "Clinic" },
+            { city: "Chicago", name: "Windy City Inclusion", zip: "60601", type: "Specialist" }
+        ];
 
-            // Set data
-            set(newInquiryRef, {
-                name: name,
-                email: email,
-                service: service,
-                message: message,
-                timestamp: Date.now()
-            })
-            .then(() => {
-                statusMsg.innerText = "Success! Your request has been sent.";
-                statusMsg.className = "mt-4 text-center text-green-600 block";
-                contactForm.reset();
-            })
-            .catch((error) => {
-                statusMsg.innerText = "Error: " + error.message;
-                statusMsg.className = "mt-4 text-center text-red-600 block";
-            });
+        // UI Functions
+        const grid = document.getElementById('disabilityGrid');
+        function renderCards(list) {
+            grid.innerHTML = list.map(d => `
+                <div class="disability-card bg-white p-6 rounded-[35px] shadow-xl cursor-pointer hover:scale-105 transition animate__animated animate__fadeInUp" onclick="openModal(${d.id})">
+                    <img src="${d.img}" class="w-full h-56 object-cover rounded-[25px] mb-4">
+                    <h4 class="text-2xl font-bold">${d.name}</h4>
+                    <p class="text-gray-400 text-sm">Click to learn more</p>
+                </div>
+            `).join('');
+        }
+        renderCards(disabilities);
+
+        window.openModal = (id) => {
+            const item = disabilities.find(x => x.id === id);
+            document.getElementById('modalContent').innerHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-4xl font-black">${item.name}</h2>
+                    <button onclick="speak('${item.desc}')" class="bg-blue-600 text-white w-12 h-12 rounded-full shadow-lg"><i class="fa-solid fa-volume-high"></i></button>
+                </div>
+                <p class="text-gray-500 text-lg mb-8">${item.desc}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-6 rounded-3xl"><p class="text-xs font-bold text-blue-400">SPECIALIST</p><p class="font-bold">${item.spec}</p></div>
+                    <div class="bg-purple-50 p-6 rounded-3xl"><p class="text-xs font-bold text-purple-400">SCHOOL</p><p class="font-bold">${item.school}</p></div>
+                </div>
+            `;
+            document.getElementById('infoModal').style.display = 'flex';
+        };
+
+        window.closeModal = () => { window.speechSynthesis.cancel(); document.getElementById('infoModal').style.display = 'none'; };
+        window.speak = (t) => { window.speechSynthesis.cancel(); window.speechSynthesis.speak(new SpeechSynthesisUtterance(t)); };
+
+        // Location Search
+        document.getElementById('zipSearch').addEventListener('input', (e) => {
+            const val = e.target.value.toLowerCase();
+            const filtered = resources.filter(r => r.city.toLowerCase().includes(val) || r.zip.includes(val));
+            document.getElementById('mapResults').innerHTML = filtered.length ? filtered.map(r => `
+                <div class="map-result p-6 bg-white rounded-2xl shadow-sm border border-gray-100 transition">
+                    <h5 class="font-black text-blue-600 text-xl">${r.name}</h5>
+                    <p class="text-gray-500 text-sm">${r.city} • ${r.zip} • <span class="text-purple-500 font-bold">${r.type}</span></p>
+                </div>
+            `).join('') : '<p class="text-gray-400 italic">No resources found in that area.</p>';
         });
 
-        // Search Logic
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            let filter = this.value.toLowerCase();
-            let cards = document.querySelectorAll('.disability-card');
-            cards.forEach(card => {
-                let text = card.querySelector('h4').innerText.toLowerCase();
-                card.style.display = text.includes(filter) ? 'block' : 'none';
-            });
+        // Search Cards
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderCards(disabilities.filter(d => d.name.toLowerCase().includes(e.target.value.toLowerCase())));
+        });
+
+        // Firebase Submit
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const status = document.getElementById('formStatus');
+            try {
+                await push(ref(database, 'inquiries'), {
+                    name: document.getElementById('userName').value,
+                    email: document.getElementById('userEmail').value,
+                    msg: document.getElementById('userMessage').value,
+                    date: new Date().toLocaleString()
+                });
+                status.innerText = "Request Saved to Database!";
+                status.className = "mt-4 text-green-500 block font-bold";
+                e.target.reset();
+            } catch(err) { status.innerText = "Error: " + err.message; status.className = "mt-4 text-red-500 block"; }
         });
     </script>
 </body>
