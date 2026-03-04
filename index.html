@@ -9,119 +9,119 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; scroll-behavior: smooth; }
         .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
         .typing-cursor::after { content: "|"; animation: blink 0.7s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .modal-overlay { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; }
+        
+        .modal-overlay { 
+            background: rgba(15, 23, 42, 0.7); 
+            backdrop-filter: blur(8px); 
+            display: none; 
+            position: fixed; 
+            inset: 0; 
+            z-index: 50; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 1rem; 
+        }
         .modal-active { display: flex; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .card-entry { animation: fadeInUp 0.5s ease forwards; }
+        .card-entry { animation: fadeInUp 0.5s ease forwards; transition: all 0.3s ease; }
     </style>
 </head>
-<body class="text-slate-800 overflow-x-hidden">
+<body class="text-slate-800">
 
     <nav class="sticky top-0 z-40 glass">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <div class="bg-indigo-600 p-2 rounded-lg">
-                        <i data-lucide="terminal" class="text-white w-5 h-5"></i>
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-indigo-600 p-2.5 rounded-xl shadow-indigo-200 shadow-lg">
+                        <i data-lucide="terminal" class="text-white w-6 h-6"></i>
                     </div>
-                    <span class="text-xl font-bold tracking-tight text-slate-900">LogYour<span class="text-indigo-600">Problem</span></span>
+                    <span class="text-2xl font-bold tracking-tight text-slate-900">LogYour<span class="text-indigo-600">Problem</span></span>
                 </div>
-                <div class="hidden md:flex space-x-8 font-medium">
-                    <button onclick="openModal()" class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition shadow-lg flex items-center gap-2">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Log New Entry
-                    </button>
-                </div>
+                <button onclick="openModal('entryModal')" class="bg-indigo-600 text-white px-7 py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-200 active:scale-95 flex items-center gap-2 font-semibold">
+                    <i data-lucide="plus" class="w-5 h-5"></i> Log New Problem
+                </button>
             </div>
         </div>
     </nav>
 
-    <header class="pt-20 pb-12 px-4 text-center">
-        <h1 class="text-5xl font-extrabold text-slate-900 mb-6">
+    <header class="pt-24 pb-16 px-4 text-center bg-white border-b border-slate-100">
+        <h1 class="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
             Solving problems for <br>
             <span id="typing-text" class="text-indigo-600 typing-cursor"></span>
         </h1>
-        <p class="text-lg text-slate-500 max-w-2xl mx-auto mb-8">A centralized knowledge base to ensure we never solve the same problem twice.</p>
-        <div class="max-w-xl mx-auto relative">
-            <i data-lucide="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
-            <input type="text" id="searchInput" placeholder="Search the knowledge base..." class="w-full pl-12 pr-6 py-4 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none shadow-sm transition">
+        <div class="max-w-2xl mx-auto relative mt-12">
+            <i data-lucide="search" class="absolute left-5 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="searchInput" placeholder="Search problems by keyword..." 
+                class="w-full pl-14 pr-6 py-5 rounded-2xl border-2 border-slate-100 focus:border-indigo-500 outline-none shadow-xl shadow-slate-200/50 transition-all text-lg">
         </div>
     </header>
 
-    <main id="log-container" class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
-        </main>
+    <main class="bg-slate-50 min-h-screen py-16">
+        <div id="log-container" class="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        <div id="noResults" class="hidden text-center py-20">
+            <i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
+            <p class="text-slate-500 text-xl">No matching problems found.</p>
+        </div>
+    </main>
 
-    <div id="entryModal" class="modal-overlay fixed inset-0 z-50 items-center justify-center p-4">
+    <div id="entryModal" class="modal-overlay">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate__animated animate__zoomIn">
-            <div class="p-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-bold flex items-center gap-2">
-                        <i data-lucide="edit-3" class="text-indigo-600"></i> Log a New Solution
-                    </h2>
-                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition">
-                        <i data-lucide="x-circle"></i>
-                    </button>
+            <div class="p-10">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-bold text-slate-900">New Log</h2>
+                    <button onclick="closeModal('entryModal')" class="text-slate-400 hover:text-slate-900 transition"><i data-lucide="x" class="w-8 h-8"></i></button>
                 </div>
-
-                <form id="problemForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Problem Title</label>
-                        <input id="formTitle" required type="text" placeholder="e.g. Memory leak in Docker container" class="w-full p-3 rounded-lg border border-slate-200 focus:border-indigo-500 outline-none transition">
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Category</label>
-                            <select id="formCategory" class="w-full p-3 rounded-lg border border-slate-200 outline-none bg-white">
-                                <option>Frontend</option>
-                                <option>Backend</option>
-                                <option>DevOps</option>
-                                <option>Security</option>
-                                <option>Database</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-slate-700 mb-1">Employee Name</label>
-                            <input id="formName" required type="text" placeholder="Your Name" class="w-full p-3 rounded-lg border border-slate-200 outline-none">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">The Solution</label>
-                        <textarea id="formSolution" required rows="4" placeholder="How did you fix it? Be specific..." class="w-full p-3 rounded-lg border border-slate-200 focus:border-indigo-500 outline-none transition"></textarea>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl hover:bg-indigo-700 transition transform active:scale-95">
-                        Submit to Knowledge Base
-                    </button>
+                <form id="problemForm" class="space-y-6">
+                    <input id="formTitle" required type="text" placeholder="Problem Title" class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none">
+                    <input id="formName" required type="text" placeholder="Your Name" class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none">
+                    <textarea id="formSolution" required rows="5" placeholder="Step-by-step solution..." class="w-full p-4 rounded-xl border border-slate-200 focus:border-indigo-500 outline-none"></textarea>
+                    <button type="submit" id="submitBtn" class="w-full bg-indigo-600 text-white font-bold py-5 rounded-2xl hover:bg-indigo-700 transition shadow-lg">Commit to Knowledge Base</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <footer class="bg-slate-900 text-slate-400 py-10 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center border-b border-slate-800 pb-8 mb-8 gap-6">
-            <div class="flex items-center gap-2">
-                <i data-lucide="terminal" class="text-indigo-400"></i>
-                <span class="text-white font-bold tracking-widest uppercase">LogYourProblem</span>
+    <div id="statusModal" class="modal-overlay">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-8 text-center animate__animated animate__bounceIn">
+            <div id="statusIcon" class="mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4"></div>
+            <h3 id="statusTitle" class="text-xl font-bold mb-2 text-slate-900"></h3>
+            <p id="statusMsg" class="text-slate-500 mb-6"></p>
+            <button onclick="closeModal('statusModal')" class="w-full py-3 bg-slate-900 text-white rounded-xl font-bold">Close</button>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 pt-20 pb-10 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-6 text-white text-2xl font-bold uppercase tracking-tight">
+                    <i data-lucide="terminal" class="text-indigo-400"></i> LogYourProblem
+                </div>
+                <p class="text-lg max-w-sm">The definitive engineering knowledge base for high-performance teams. Documented hurdles build stronger futures.</p>
             </div>
-            <div class="flex gap-8 text-sm">
-                <a href="#" class="hover:text-white transition">Security Protocol</a>
-                <a href="#" class="hover:text-white transition">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition">Admin Dashboard</a>
+            <div>
+                <h4 class="text-white font-bold mb-6 uppercase text-sm tracking-widest">Company</h4>
+                <div class="flex flex-col gap-4 text-sm">
+                    <a href="#" class="hover:text-indigo-400 transition">Internal Wiki</a>
+                    <a href="#" class="hover:text-indigo-400 transition">Security Portal</a>
+                    <a href="#" class="hover:text-indigo-400 transition">Admin Dashboard</a>
+                </div>
             </div>
         </div>
-        <p class="text-center text-xs text-slate-500 tracking-wide">&copy; 2026 TechCorp Internal Engineering Hub. All records are confidential.</p>
+        <div class="max-w-7xl mx-auto border-t border-slate-800 pt-10 flex flex-col md:flex-row justify-between text-xs font-bold uppercase tracking-widest gap-4">
+            <p>&copy; 2026 TechCorp Global Infrastructure.</p>
+            <div class="flex gap-8"><a href="#">Privacy</a><a href="#">Security</a><a href="#">Terms</a></div>
+        </div>
     </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Your Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTTk13Wk1B0RmoRoioKMO_ASD5lntvIz8",
             authDomain: "disability-ae050.firebaseapp.com",
@@ -133,87 +133,97 @@
             measurementId: "G-RPS83BL4RS"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
         const logsRef = ref(database, 'problem_logs');
 
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Typing Effect
+        // Typing effect
         const textElement = document.getElementById('typing-text');
-        const phrases = ["future developers.", "your teammates.", "tomorrow's self.", "easier debugging."];
+        const phrases = ["future developers.", "your teammates.", "tomorrow's self."];
         let pIndex = 0, cIndex = 0, isDeleting = false;
-
         function type() {
             const current = phrases[pIndex];
             textElement.textContent = isDeleting ? current.substring(0, cIndex - 1) : current.substring(0, cIndex + 1);
             cIndex = isDeleting ? cIndex - 1 : cIndex + 1;
-            let speed = isDeleting ? 50 : 100;
-            if (!isDeleting && cIndex === current.length) { isDeleting = true; speed = 2000; }
-            else if (isDeleting && cIndex === 0) { isDeleting = false; pIndex = (pIndex + 1) % phrases.length; speed = 500; }
-            setTimeout(type, speed);
+            if (!isDeleting && cIndex === current.length) { isDeleting = true; setTimeout(type, 2000); }
+            else if (isDeleting && cIndex === 0) { isDeleting = false; pIndex = (pIndex + 1) % phrases.length; setTimeout(type, 500); }
+            else setTimeout(type, isDeleting ? 50 : 100);
         }
         type();
 
-        // Modal Controls (exposed to window for onclick attributes)
-        window.openModal = function() { document.getElementById('entryModal').style.display = 'flex'; document.getElementById('entryModal').classList.add('modal-active'); }
-        window.closeModal = function() { document.getElementById('entryModal').style.display = 'none'; document.getElementById('entryModal').classList.remove('modal-active'); }
+        window.openModal = (id) => document.getElementById(id).classList.add('modal-active');
+        window.closeModal = (id) => document.getElementById(id).classList.remove('modal-active');
 
-        // Render Card Function
-        function renderCard(title, category, name, solution, date) {
-            const container = document.getElementById('log-container');
-            const newCard = document.createElement('div');
-            newCard.className = "bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg transition-all card-entry";
-            
-            newCard.innerHTML = `
-                <div class="flex justify-between items-start mb-4">
-                    <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">${category}</span>
-                    <span class="text-slate-400 text-xs italic">${date}</span>
-                </div>
-                <h3 class="text-xl font-bold mb-2 text-slate-900">${title}</h3>
-                <p class="text-slate-600 text-sm mb-4 leading-relaxed line-clamp-4">${solution}</p>
-                <div class="border-t border-slate-50 pt-4 flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">${name.charAt(0).toUpperCase()}</div>
-                    <span class="text-sm font-semibold text-slate-700">${name}</span>
-                </div>
-            `;
-            container.insertBefore(newCard, container.firstChild);
+        function showStatus(success, title, msg) {
+            const icon = document.getElementById('statusIcon');
+            icon.innerHTML = success ? '<i data-lucide="check-circle" class="w-8 h-8 text-green-600"></i>' : '<i data-lucide="alert-triangle" class="w-8 h-8 text-red-600"></i>';
+            icon.className = `mx-auto w-16 h-16 rounded-full flex items-center justify-center mb-4 ${success ? 'bg-green-100' : 'bg-red-100'}`;
+            document.getElementById('statusTitle').innerText = title;
+            document.getElementById('statusMsg').innerText = msg;
+            lucide.createIcons();
+            openModal('statusModal');
         }
 
-        // Listen for new logs from Firebase
+        function renderCard(title, name, solution, date) {
+            const container = document.getElementById('log-container');
+            const card = document.createElement('div');
+            card.className = "bg-white p-8 rounded-3xl border border-slate-200 shadow-sm card-entry search-item";
+            card.dataset.keyword = title.toLowerCase();
+            card.innerHTML = `
+                <div class="flex justify-between items-center mb-6"><span class="text-slate-400 text-xs font-bold uppercase tracking-widest">${date}</span></div>
+                <h3 class="text-2xl font-bold mb-4 text-slate-900 leading-tight">${title}</h3>
+                <p class="text-slate-600 text-sm mb-8 leading-relaxed line-clamp-4">${solution}</p>
+                <div class="flex items-center gap-3 pt-6 border-t border-slate-50">
+                    <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs">${name.charAt(0).toUpperCase()}</div>
+                    <div><p class="text-sm font-bold text-slate-900">${name}</p><p class="text-[10px] text-slate-400 uppercase tracking-tighter">Verified Dev</p></div>
+                </div>`;
+            container.insertBefore(card, container.firstChild);
+            lucide.createIcons();
+        }
+
         onChildAdded(logsRef, (data) => {
             const log = data.val();
-            renderCard(log.title, log.category, log.name, log.solution, log.timestamp);
+            renderCard(log.title, log.name, log.solution, log.timestamp);
         });
 
-        // Submit to Firebase
         document.getElementById('problemForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerText = "Syncing with Cloud...";
+            btn.innerText = "Syncing...";
 
             const newLog = {
                 title: document.getElementById('formTitle').value,
-                category: document.getElementById('formCategory').value,
                 name: document.getElementById('formName').value,
                 solution: document.getElementById('formSolution').value,
                 timestamp: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             };
 
-            push(logsRef, newLog)
-                .then(() => {
-                    btn.disabled = false;
-                    btn.innerText = "Submit to Knowledge Base";
-                    closeModal();
-                    document.getElementById('problemForm').reset();
-                })
-                .catch((err) => {
-                    alert("Sync Error: " + err.message);
-                    btn.disabled = false;
-                });
+            push(logsRef, newLog).then(() => {
+                btn.disabled = false;
+                btn.innerText = "Commit to System";
+                closeModal('entryModal');
+                document.getElementById('problemForm').reset();
+                showStatus(true, "Success!", "Problem logged to knowledge base.");
+            }).catch(() => {
+                btn.disabled = false;
+                btn.innerText = "Commit to System";
+                showStatus(false, "Error", "Failed to sync. Check connection.");
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.search-item');
+            let found = false;
+            items.forEach(item => {
+                const match = item.dataset.keyword.includes(term);
+                item.style.display = match ? 'block' : 'none';
+                if(match) found = true;
+            });
+            document.getElementById('noResults').style.display = found ? 'none' : 'block';
         });
     </script>
 </body>
